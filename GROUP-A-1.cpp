@@ -45,7 +45,8 @@ void init()
 // funnction for hash function
 int HashFun(char key[])
 {
-  int i,index,sum=0;      //here used division method( technique where the hash value is obtained by taking the remainder of the division of the key by the size of the hash table.)
+  int i,index,sum=0;      //here used division method (technique where the hash value is obtained by taking the remainder 
+	                  //of the division of the key by the size of the hash table.)
   
   for(i=0;key[i]!='\0';i++)
   {
