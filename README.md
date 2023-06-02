@@ -55,3 +55,12 @@ sorted in ascending/ Descending order. Also find how many maximum comparisons ma
 require for finding any keyword. Use Height balance tree and find the complexity for
 finding a keyword.
 
+GROUP-F-23. Department maintains a student information. The file contains roll number, name,
+division and address. Allow user to add, delete information of student. Display
+information of particular employee. If record of student does not exist an appropriate
+message is displayed. If it is, then the system displays the student details. Use sequential
+file to main the data.
+
+GROUP-F-25. Implementation of a direct access file -Insertion and deletion of a record from a direct
+access file
+
