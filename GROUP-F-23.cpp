@@ -13,7 +13,6 @@
 #include<iomanip>
 
 using namespace std;
-
 void addStudent () 
 {
 ofstream f("db.txt", ios::app);
@@ -23,7 +22,7 @@ cout << "Enter student Roll No: ";
 cin>>rn;
 cout<< "Enter Student Name:" ;
 cin>> name;
-cout << "Enter student division:";
+cout << "Enter Student Division:";
 cin>>div;
 cout <<"Enter Student Address:";
 cin >> add;
@@ -38,15 +37,12 @@ void printStudent()
 {
 
 ifstream f ("db.txt");
-
 string line ;
 cout<< " \n printing file Data..."<<endl;
-
 while (getline (f, line)) 
 {
 cout << line <<endl;
 }
-
 cout << " printing completed!";
  f. close();
 }
@@ -57,14 +53,15 @@ void SearchStudent ()
 
 string line,rn;
 
-cout<< "Enter Shident Roll No. To be search:";
+cout<< "Enter Student Roll No. To be search:";
 cin>>rn;
-
 bool found = false;
- while (getline (f,line)) {
-if(line.find(rn)!=string::npos)
+ while (getline (f,line))
+ {
+    if(line.find(rn)!=string::npos)
 {
-	cout<<"student details:"<<endl;
+	cout<<"student found"<<endl;
+	cout<<"student details!!!"<<endl;
 	cout<<line<<endl;
 	found=true;
 	break;
@@ -72,27 +69,31 @@ if(line.find(rn)!=string::npos)
 }
 f.close();
 if(!found)
-{cout << " Student Doesn't Exist "<< endl;
+{
+	cout << " Student Doesn't Exist "<< endl;
 }
 
 }
 
 void deletestudent () 
-{ ifstream f("db.txt");
+{ 	ifstream f("db.txt");
+	string line,rn;
+	cout << " Enter Student Roll no. To deleted";
+	cin>>rn;
+	
 
-string line,rn;
-
-cout << " Enter Student Roll no. To deleted";
-cin>>rn;
-
-string fileData;
-
-while(getline (f, line))
- { if (line.find (rn) == string::npos) 
- { fileData += line;
-fileData += " \n";
+    while(getline (f, line))
+ { 
+	    if (line.find (rn) == string::npos) 
+ { 
+		    fileData += line;
+                    fileData += " \n";
 }
 }
+ f.close();
+ ofstream f1("db.txt",ios::out);
+ f1<<filedata;
+ f1.close();
 }
 
 int main()
@@ -102,38 +103,35 @@ int main()
  f.close();
  int ip;
  while(ip!=-1)
-{ cout << "\n Enter your choice \n. 1.Add student\n 2. Delete Student \n 3.Search Student\n4.printdata\n5"<<endl;
+{ 
+	 cout << "\n Enter your choice \n. 1.Add student\n 2. Delete Student \n 3.Search Student\n4.printdata\n5"<<endl;
 
 cin>> ip;
 
 switch (ip)
- { case 1:
+ { 
+	case 1:
  	addStudent();
 	break; 
 
-case 2:
-
+        case 2:
 	deletestudent();
 	break; 
 
-case 3:
+        case 3:
  	SearchStudent ();
  	break; 
 
-case 4:
-
+        case 4:
 	printStudent();
 	break; 
-case 5:
+		
+        case 5:
 	return 0;
 	break;
-
 default:
-
-cout<< "please Refnter your choice"<<endl;
+cout<< "please ReEnter your choice"<<endl;
 break;
 }
-
 }
-return 0;
 }
