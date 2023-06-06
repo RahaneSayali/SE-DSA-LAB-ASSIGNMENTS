@@ -14,188 +14,135 @@ Justify the storage representation used.
 
 //header files 
 #include <iostream>
+#include<string.h>
 using namespace std;
 
-int adjMTX[4][4]; //for adjancency matrix
-int row = 4;
-int col = 4;
-
-struct Node   //for adjancency list
+class flight
 {
-    string data;
-    struct Node *down,*next;
-}*Head;
-
-string vertex(int val)   //function to return vertex name
+	public:
+		int city_count=0;
+		int am[10][10];	//distance matrix
+		char city_index[10][10]; 	//name of source and destination city
+		flight();	//constructor
+	    int create();
+	    void display(int city_count);
+};
+flight::flight()
 {
-    if(val==0)
-    {
-        return "Nashik";
-    }
-    else if(val == 1)
-    {
-        return "Pune";
-    }
-    else if(val == 2)
-    {
-        return "Mumbai";
-    }
-    else
-    {
-        return "Nagpur";
-    }
+	int i,j;
+	for(i=0;i<10;i++)
+	{
+		strcpy(city_index[i],"xx");	//name of source and destination city is null
+	}
+	for(i=0;i<10;i++)
+	{
+		for(j=0;j<10;j++)
+		{
+			am[i][j]=0;		//distance matrix is 0
+		}
+	}
 }
 
-void createAdjMTX()      //function to create adjacency matrix
+int flight::create()
 {
-    int i,j;
-    for(i=0;i<row;i++)
-    {
-        for(j=0;j<col;j++)
-        {
-            cout<<"\n Is ther a flight from "<<vertex(i)<<" to "<<vertex(j)<<"?:";
-            cin>>adjMTX[i][j];
-        }
-    }
+	char s[10],d[10],c;
+	int wt,j,si,di;
+	int city_count=0;
+	do{
+	
+	cout<<"\n\t enter the source city:";
+	cin>>s;
+	cout<<"\n\t enter the destination city:";
+	cin>>d;
+	for(j=0;j<10;j++)	//if source city already exist
+	{
+		if(strcmp(city_index[j],s)==0);
+		break;
+	}
+	if(j=10)
+	{
+		strcpy(city_index[city_count],s);	//if not exist then copy in cityindex matrix
+		city_count++;
+	}
+	for(j=0;j<10;j++)
+	{
+		if(strcmp(city_index[j],d)==0);
+		break;
+	}
+	if(j=10)
+	{
+		strcpy(city_index[city_count],d);
+		city_count++;
+	}
+	cout<<"\n\t enter the diatance between"<<s<<"\t and \t"<<d<<":";
+	cin>>wt;
+	for(j=0;j<10;j++)
+	{
+		if(strcmp(city_index[j],s)==0)
+		si=j;
+		if(strcmp(city_index[j],d)==0)
+		di=j;
+	}
+	
+	am[si][di]=wt;
+	cout<<"you want to enter more cities (y/n):";
+	cin>>c;
+}while((c=='Y'||c=='y'));
+return (city_count);
+}
+void flight::display(int city_count)
+{
+	int i,j;
+	cout<<"Adjacency Matrix \n ";
+	for(i=0;i<city_count;i++)
+	{
+		cout<<"\t"<<city_index[i];	//display name of city
+	}
+	cout<<"\n";
+	for(i=0;i<city_count;i++)
+	{
+		cout<<city_index[i];
+		for(j=0;j<city_count;j++)
+		{
+			cout<<"\t"<<am[i][j];	//display distance
+		}
+		cout<<"\n";
+		
+	}
+}
+int main()
+{
+	flight f;
+	int n,city_count;
+	char c;
+	do
+	{
+		cout<<"\n\t*** Flight Main Menu *****";
+		cout<<"\n\t1. Create \n\t2. Adjacency Matrix\n\t3. Exit";
+		cout<<"\n\t.....Enter your choice : ";
+		cin>>n;
+		switch(n)
+		{
+		    
+			case 1:
+					city_count=f.create();
+					break;
+			case 2:
+					f.display(city_count);
+					break;
+			case 3:
+					return 0;
+		}
+		cout<<"\n\t Do you Want to Continue in Main Menu....(y/n) : ";
+		cin>>c;
+	}while(c=='y'||c=='Y');
+	return 0;
 }
 
 
-void displayAdjMTX()   //function to display adjacency matrix
-{
-    int i,j;
-    for(i=0;i<row;i++)
-    {
-        cout<<"\n";
-        for(j=0;j<col;j++)
-        {
-            cout<<"\t"<<adjMTX[i][j];
-        }
-    }
-}
-//function to create adjacency list
-void createAdjList()
-{
-    struct Node *newnode,*move,*p;
-    int i;
-    int nodes;
-    int edges;
 
-    cout<<"\n\n How many vertices in graph : ";
-    cin>>nodes;
 
-    for(i=0;i<nodes;i++)
-    {
-        newnode = new struct Node;
-        newnode->data = vertex(i);
-        newnode->down = NULL;
-        newnode->next = NULL;
+    
 
-        if(Head == NULL)
-        {
-            Head = newnode;
-            move = Head;
-        }
-        else
-        {
-            move->down = newnode;
-            move = move->down;
-        }
-    }
-
-   move = Head;
-    p = Head;
-    while(move != NULL)
-    {
-    cout<<"\n How many adjacent vertices for "<<move->data<<" : ";
-    cin>>edges;
     
-    for(i=0; i<edges; i++)
-    {
-    Newnode = new struct Node;
-    
-    cout<<"\n\t Enter An Adjacent Vertex: ";
-    cin>>Newnode->data;
-    Newnode->down = NULL;
-    Newnode->next = NULL;
-    
-    p->next = Newnode;
-    p = p->next;
-    }
-    
-    move = move->down;
-    p = move;
-    }
-}
-//......Function to Display Adjacency List
-    void display_adjList()
-    {
-    struct Node *move, *p;
-    
-    cout<<"\n\t -Head-";
-    
-    move = Head;
-    while(move != NULL)
-    {
-    cout<<"\n\t | "<<move->data<<" |--> ";
-    p = move->next;
-    while(p != NULL)
-    {
-    cout<<p->data<<" --> ";
-    p = p->next;
-    }
-    cout<<"NULL";
-    
-    move = move->down;
-    p = move;
-    }
-    cout<<"\t NULL ";
-    }
-    //.......Function to check is this a Connected Graph
-    void check_Connect()
-    {
-    int i,j;
-    int NonZero;
-    
-    i=0;
-    
-    do
-    {
-    NonZero = 0;
-    for(j=0; j<Col; j++)
-    {
-    if(adjMtx[i][j] != 0)
-    NonZero++;
-    }
-    i++;
-    }while(i < Row && NonZero >= 1);
-    
-    if(i == Row)
-    cout<<"\n\n The Given Graph is Connected Graph...!!!";
-    else
-    cout<<"\n\n *** The Given Graph is Not Connected Graph...!!!";
-    }
-    //......Main Function
-    int main()
-    {
-    cout<<"\n\n A C++ Program to check whether Graph is Connected.? ";
-    cout<<"\n\n 1. Creating Adjacency Matrix.........\n";
-    create_adjMtx();
-    
-    cout<<"\n\n 2. Display Adjacency Matrix.........\n";
-    display_adjMtx();
-    cout<<"\n Non-Zero Values: Distances in Kilometers";
-    
-    
-    cout<<"\n\n 3. Create Adjacency List.........\n";
-    Head = NULL;
-    create_adjList();
-    cout<<"\n Adjacency List is created Successfully...!!!";
-    
-    cout<<"\n\n 4. Display Adjacency List.........";
-    display_adjList();
-    
-    cout<<"\n\n 5. Check Connected Graph......???";
-    check_Connect();
-    
-    return 0;
-    }
+  
