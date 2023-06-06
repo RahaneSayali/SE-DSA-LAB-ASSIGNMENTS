@@ -10,212 +10,152 @@ telephone numbers.*/
 
 //Header Files Used
 #include<iostream>
-#include<cstring>
+#include<string.h>
 using namespace std;
 
-//Here created hash table of size-10
-int Tablesize=10;
-
-struct HashTable
+ struct node
 {
-	char Key[10];   //key means Client Name
-	int Val;        //Value means Telephone No.
+ int v;
+node* next;
+}*HashTable[10];	//cearte hash table of size 10
 
-}HT1[10],HT2[10];    //HT1 Handles collision by linear probing
-                     //HT2 Handles collision by quadratic probing
-
-
-//Function to Initialse Keys and Values of Hash table
-void init()
+class hashing
+{   
+public:
+hashing()			// constructor of hashing class
 {
-	int i;
-	for(i=0;i<Tablesize;i++)
-	{
-		strcpy(HT1[i].Key,"....");
-		HT1[i].Val=0;
-	}
-	
-	for(i=0;i<Tablesize;i++)
-	{
-		strcpy(HT2[i].Key,"....");
-		HT2[i].Val=0;
-	}
+for(int i=0 ; i<10 ; i++)
+{
+        HashTable[i]=NULL;	// assigne null value to hash table
+    }
+ }
+
+int HashFunction(int v)
+{
+  return (v%10);
+ }
+ node* create_node(int x)   //  craete node
+{
+     node* temp=new node;
+    temp->next=NULL;
+    temp->v=x;
+    return temp;
+ }
+
+ void display()
+{
+     for(int i=0 ; i< 10; i++)
+{
+        node * temp=new node;
+        temp=HashTable[i];
+        cout<<"a["<<i<<"] : ";
+        while(temp !=NULL)
+{
+                cout<<" ->"<<temp->v;
+                temp=temp->next;
+         }
+        cout<<"\n";
 }
+ }
 
-// funnction for hash function
-int HashFun(char key[])
+int searchElement(int v)
 {
-  int i,index,sum=0;      //here used division method (technique where the hash value is obtained by taking the remainder 
-	                  //of the division of the key by the size of the hash table.)
-  
-  for(i=0;key[i]!='\0';i++)
-  {
-  	sum=sum+key[i];
-  }
-  index=sum%Tablesize; 
-  
-  return index;
-}
+     bool flag = false;
+              int hash_val = HashFunction(v);
+              node* entry = HashTable[hash_val];
+              cout<<"\nElement found at : ";
+              while (entry != NULL)
+         {
+                    if (entry->v==v)
+                 {
+                            cout<<hash_val<<" : "<<entry->v<<endl;
+                            flag = true;
+                     }
+                    entry = entry->next;
+              }
+              if (!flag)
+              return -1;
+ }
 
-//function for Insertion in HT1
-
-void insert_HT1(char Cname[],int Tele)     //insert (key,value)
+ void deleteElement(int v)
 {
-	int i,id,index;
-	
-	index=HashFun(Cname);
-	
-     if(strcmp(HT1[index].Key,"....")==0)    //no collision 
-     {
-     	strcpy(HT1[index].Key,Cname);
-     	HT1[index].Val=Tele;
-     } 
-     else                          
-     {
-     	while(strcmp(HT1[index].Key,"....")!=0)
-     	{
-     		index=(index+1)%Tablesize;
-     	}
-     	strcpy(HT1[index].Key,Cname);
-     	HT1[index].Val=Tele;
-     }
-}
+     int hash_val = HashFunction(v);	//find the index of v using hashfunction
+              node* entry = HashTable[hash_val];
+              if (entry == NULL )	// no element is present 
+              {
+                 cout<<"No Element found ";
+                      return;
+              }
 
-//function for insertion in HT2
-
-void insert_HT2(char Cname[],int Tele)
+              if(entry->v==v)
 {
-	int i,index;
-	index=HashFun(Cname);
-	
-	if(strcmp(HT2[index].Key,"....")==0)
-	{
-		strcpy(HT2[index].Key,Cname);
-		HT2[index].Val=Tele;
-	}
-	else
-	{
-		i=1;
-		int id=index;
-		while(strcmp(HT2[id].Key,"....")!=0)
-		{
-			id=(index+i*i)%Tablesize;
-			i++;
-		}
-	     strcpy(HT2[id].Key,Cname);
-	     HT2[id].Val=Tele;
-	}
-}
+                HashTable[hash_val]=entry->next;	//link pointer to next 
+                return;
+              }
+              while ((entry->next)->v != v)
+        {
+                  entry = entry->next;
+              }
+              entry->next=(entry->next)->next;
+ }
 
-//function to display Hash Tables
-void display()
+ void insertElement(int v)
 {
-	int i;
-	cout<<"\n\n------Hash Table 01------";
-	cout<<"\n\nBucket(Key,Value)";
-	for(i=0;i<Tablesize;i++)
-	{
-		cout<<"\n "<<i<<"-("<<HT1[i].Key<<","<<HT1[i].Val<<")";
-	
-	}
-	cout<<"\n\n------Hash Table 02------";
-	cout<<"\n\nBucket(Key,Value)";
-	for(i=0;i<Tablesize;i++)
-	{
-		cout<<"\n "<<i<<"-("<<HT2[i].Key<<","<<HT2[i].Val<<")";
-	
-	}
-}
-//function to Search keys in hash table-1
-void search_HT1(char Cname[])
+     int hash_val = HashFunction(v);	//index of v using hashfunction
+              node* temp=new node;		//create temporary node
+              node* head=new node;		//create head node
+              head = create_node(v); //create node to be inseted as head node
+              temp=HashTable[hash_val];//position element in hashtable
+              if (temp == NULL)		
+                               {
+                              HashTable[hash_val] =head; //if temp null then insert head node in that position
+                               }
+              else
 {
-	int index=HashFun(Cname);
-	int cnt=1;
-	int id=index;
-	
-	if(strcmp(HT1[id].Key,Cname)==0)
-	{
-		cout<<"\n\t"<<HT1[id].Key<<":"<<HT1[id].Val<<":"<<cnt;
-	}
-	else			 
-	{
-		int i=1;
-		while(strcmp(HT1[id].Key,Cname)!=0)
-		{
-			id=(index+i)%Tablesize;
-			i++;   
-			cnt++; 
-		}
-	   cout<<"\n\t"<<HT1[id].Key<<":"<<HT1[id].Val<<":"<<cnt;
-	}
-}
-
-
-//funtion to search keys in hash table-02
-void search_HT2(char Cname[])
-{
-	int index=HashFun(Cname);
-	int cnt=1;
-	int id=index;
-	
-	if(strcmp(HT2[id].Key,Cname)==0)
-	{
-		cout<<"\n\t"<<HT2[id].Key<<":"<<HT2[id].Val<<":"<<cnt;
-	}
-	else			 
-	{
-		int i=1;
-		while(strcmp(HT2[id].Key,Cname)!=0)
-		{
-			id=(index+i*i)%Tablesize;
-			i++;   
-			cnt++;  
-		}
-	   cout<<"\n\t"<<HT2[id].Key<<":"<<HT2[id].Val<<":"<<cnt;
-	}
-}
-
+                 while (temp->next != NULL)	//traverse the hashtable until we get null
+                {
+                      temp = temp->next;
+                   }    
+                     temp->next =head;	// when found null then insert head node in that position
+              }
+ }
+};
 int main()
 {
-cout<<"\n\n--------Hash Table-----------";
+    int ch;		//take choice
+ int data,search,del;
+    hashing h;	//object
+    do
+{
+cout<<"\nTelephone : \n1.Insert \n2.Display \n3.Search \n4.Delete \n5.Exit";
+        cin>>ch;
+        switch(ch)
+{
+            case 1:cout<<"\nEnter phone no. to be inserted : ";
+                    cin>>data;
+h.insertElement(data);
+                 break;
+            case 2:h.display();
+                    break;
+            case 3:cout<<"\nEnter the no to be searched : ";
+                    cin>>search;
 
-init(); 
-insert_HT1("Aishwarya",912245);
-insert_HT1("Vidhi",912365);
-insert_HT1("Trupti",962888);
-insert_HT1("Minal",942345);
-insert_HT1("Ovi",942185);
-insert_HT1("Tina",962345);
-insert_HT1("Sanvi",942345);
-insert_HT1("Kirti",915345);
+                 if (h.searchElement(search) == -1)
+                            {
+                                cout<<"No element found at key ";
+                                 continue;
+                            }
+                    break;
+            case 4:cout<<"\nEnter the phno. to be deleted : ";
+                 cin>>del;
+                 h.deleteElement(del);
+                  cout<<"Phno. Deleted"<<endl;
+                    break;
+                }
+        }while(ch!=5);
+        return 0;
 
-
-
-insert_HT2("Ridhi",912245);
-insert_HT2("Vishwas",912365);
-insert_HT2("Trisha",962888);
-insert_HT2("Mina",942345);
-insert_HT2("Oviya",942185);
-insert_HT2("Natasha",962345);
-insert_HT2("Sanika",942345);
-insert_HT2("Krushna",915345);
-
-display();
-
-cout<<"\n\n-------Search in Hash Table-01-------";
-cout<<"\n\n\tClient:Telephone:Comparisions";
-cout<<"\n---------------------------------------------";
-search_HT1("Ovi");
-search_HT1("Tina");
-search_HT1("Kirti");
-
-
-cout<<"\n\n\n-------Search in Hash Table-02-------";
-cout<<"\n\n\tClient:Telephone:Comparisions";
-cout<<"\n---------------------------------------------";
-search_HT2("Ridhi");
-search_HT2("Oviya");
-search_HT2("Sanika");
-cout<<endl;
-return 0;
 }
+
+
+
