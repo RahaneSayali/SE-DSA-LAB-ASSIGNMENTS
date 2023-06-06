@@ -8,33 +8,34 @@ implementation to quickly look up client‘s telephone number. Make use of two c
 handling techniques and compare them using number of comparisons required to find a set of 
 telephone numbers.*/ 
 
-//Header Files Used
+//Header Files 
+
 #include<iostream>
 #include<string.h>
 using namespace std;
 
- struct node
+struct node
 {
- int v;
+  int v;
 node* next;
-}*HashTable[10];	//cearte hash table of size 10
+}*HashTable[10];	//create hash table of size 10
 
 class hashing
 {   
 public:
 hashing()			// constructor of hashing class
 {
-for(int i=0 ; i<10 ; i++)
+for(int i=0 ; i<10 ; i++)  //initializaton
 {
-        HashTable[i]=NULL;	// assigne null value to hash table
+        HashTable[i]=NULL;	 // assign null value to hash table
     }
  }
 
 int HashFunction(int v)
 {
-  return (v%10);
+  return (v%10);   //division method used
  }
- node* create_node(int x)   //  craete node
+ node* create_node(int x)   //  create node
 {
      node* temp=new node;
     temp->next=NULL;
@@ -57,7 +58,7 @@ int HashFunction(int v)
         cout<<"\n";
 }
  }
-
+//for searching 
 int searchElement(int v)
 {
      bool flag = false;
@@ -76,7 +77,7 @@ int searchElement(int v)
               if (!flag)
               return -1;
  }
-
+//for deletion
  void deleteElement(int v)
 {
      int hash_val = HashFunction(v);	//find the index of v using hashfunction
@@ -99,6 +100,7 @@ int searchElement(int v)
               entry->next=(entry->next)->next;
  }
 
+ //for insertion
  void insertElement(int v)
 {
      int hash_val = HashFunction(v);	//index of v using hashfunction
@@ -116,10 +118,11 @@ int searchElement(int v)
                 {
                       temp = temp->next;
                    }    
-                     temp->next =head;	// when found null then insert head node in that position
+                     temp->next =head;  	// when found null then insert head node in that position
               }
  }
 };
+
 int main()
 {
     int ch;		//take choice
